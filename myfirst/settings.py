@@ -5,9 +5,6 @@ import sys
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-PROJECT_ROOT = os.path.dirname(__file__)
-sys.path.insert(0, os.path.join(PROJECT_ROOT, 'apps'))
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-54h(ktk#n_!!bt5#=d48mc0h2@u@v-3@pa2j0x$rergj(%w%a)'
 
@@ -24,6 +21,7 @@ INSTALLED_APPS = [
 	'django.contrib.sessions',
 	'django.contrib.messages',
 	'django.contrib.staticfiles',
+	'articles.apps.ArticlesConfig'
 ]
 
 MIDDLEWARE = [
