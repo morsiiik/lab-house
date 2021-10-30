@@ -14,6 +14,13 @@ def classical_articles(request):
 	return HttpResponse('<h1>This page contains classical articles</h1>')
 
 
+def categories(request, catid):
+	if request.GET:
+		print(request.GET)
+		return HttpResponse(f'<h1>You\'ve given some parameters {request.GET[0]}</h1>')
+	return HttpResponse(f'<h1>This page contains categories</h1><p>{catid}</p>')
+
+
 def all_articles(request):
 	return HttpResponse('<h1>This page contains all articles</h1>')
 
