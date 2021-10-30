@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseNotFound
 
 
+# functions to show various pages here
 def index(request):
 	return HttpResponse('<h1>Articles app page</h1>')
 
@@ -14,10 +15,11 @@ def classical_articles(request):
 	return HttpResponse('<h1>This page contains classical articles</h1>')
 
 
-def categories(request, catid):
-	if catid > 50:
+# get parameter treated here
+def categories(request, cat_id):
+	if cat_id > 50:
 		return redirect('/', permanent = False)
-	return HttpResponse(f'<h1>This page contains categories</h1><p>{catid}</p>')
+	return HttpResponse(f'<h1>This page contains categories</h1><p>{cat_id}</p>')
 
 
 def all_articles(request):
@@ -32,5 +34,6 @@ def main_page(request):
 	return HttpResponse('<h1>This is the main page of the site\n\n\nWelcome to lab-house</h1>')
 
 
+# function to handle 404 errors
 def page_not_found(request, exception):
 	return HttpResponseNotFound('<h1>It seems like there is not any page with address given</h1>')

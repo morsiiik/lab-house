@@ -1,4 +1,5 @@
 from pathlib import Path
+# os is essential here so that we can set paths
 import os
 import sys
 
@@ -89,3 +90,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# # these are to be set in accordance with Django documentation
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # a path to a folder 'media' in a BASE_DIR path
+MEDIA_URL = '/media/'  # this will be added to media files so that them found easily
