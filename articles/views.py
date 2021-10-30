@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseNotFound
 
 
@@ -15,9 +15,8 @@ def classical_articles(request):
 
 
 def categories(request, catid):
-	if request.GET:
-		print(request.GET)
-		return HttpResponse(f'<h1>You\'ve given some parameters {request.GET[0]}</h1>')
+	if catid > 50:
+		return redirect('/', permanent = False)
 	return HttpResponse(f'<h1>This page contains categories</h1><p>{catid}</p>')
 
 

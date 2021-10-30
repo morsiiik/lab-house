@@ -1,7 +1,8 @@
-from django.urls import path, re_path # for regular expressions
+from django.urls import path, re_path  # for regular expressions
 from .views import *
 
 urlpatterns = [
+	path('', index, name = 'home'),
 	path('hot/', hot_articles),
 	path('all/', all_articles),
 	path('classical/', classical_articles),
