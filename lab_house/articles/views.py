@@ -1,16 +1,19 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseNotFound, Http404
+from .models import *
+
 
 menu = ['О сайте', 'Добавить статью', 'Обратная связь', 'Войти']
 
 
 # functions to show various pages here
 def index(request):
-	return render(request, 'articles/index.html', {'title': menu[3]})
+	posts = Articles.objects.all()
+	return render(request, 'articles/index.html', {'posts': posts, 'menu': menu, 'title': 'Главная страница'})
 
 
 def about(request):
-	return render(request, 'articles/about.html', {'title': menu[0]})
+	return render(request, 'articles/about.html', {'menu': menu, 'title': 'О сайте'})
 
 
 def hot_articles(request):
