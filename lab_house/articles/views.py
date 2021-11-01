@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseNotFound
 
 # functions to show various pages here
 def index(request):
-	return HttpResponse('<h1>Articles app page</h1>')
+	return render(request, '')
 
 
 def hot_articles(request):
