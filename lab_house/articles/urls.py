@@ -2,7 +2,7 @@ from django.urls import path, re_path  # for regular expressions
 from .views import *  # imports all the function in the concerned file
 
 urlpatterns = [
-	path('', index, name = 'home'),  # home path, redirection also if 'home' returned with redirection somewhere
+	path('', home, name = 'home'),  # home path, redirection also if 'home' returned with redirection somewhere
 	path('about/', about, name = 'about'),
 	path('hot/', hot_articles),  # to hot
 	path('all/', all_articles),  # to all

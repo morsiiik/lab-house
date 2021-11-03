@@ -3,13 +3,21 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404
 from .models import *
 
 
-menu = ['О сайте', 'Добавить статью', 'Обратная связь', 'Войти']
+menu = ['Войти', 'Добавить статью', 'Обратная связь', 'О сайте']
 
 
-# functions to show various pages here
+def home(request):
+	context = {
+		'title': 'Articles',
+		'menu': menu,
+		'articles': Articles.objects.all()
+	}
+	return render(request, 'articles/home.html', context = context)
+
+
 def index(request):
 	posts = Articles.objects.all()
-	return render(request, 'articles/index.html', {'posts': posts, 'menu': menu, 'title': 'Главная страница'})
+	return render(request, 'articles/home.html', {'posts': posts, 'menu': menu, 'title': 'Главная страница'})
 
 
 def about(request):
