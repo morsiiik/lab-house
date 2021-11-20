@@ -1,0 +1,15 @@
+{% extends 'labs/base.html' %}
+
+{% block content %}
+    <h1>Lab number {{ curr_lab.id }}</h1>
+
+    <h2>Название: {{ curr_lab.title }}</h2>
+    <h2><a href={{ curr_lab.url }} target="_blank">Cсылка</a></h2>
+
+    <h2>Описание:</h2>
+    <p>{{ curr_lab.task }}</p>
+
+    <h2>Deadline:</h2>
+    <p>{{ curr_lab.deadline }}</p>
+
+{% endblock content %}

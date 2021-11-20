@@ -3,23 +3,58 @@ from django.shortcuts import render, redirect
 
 from .models import *
 
-menu = ["About site", "Add comment", "Sign in"]
+menu = [
+    {'title': 'Main', 'url_name': 'home'},
+    {'title': 'All labs', 'url_name': 'all'},
+    {'title': 'Labs available', 'url_name': 'labs_av'},
+    {'title': 'About', 'url_name': 'about'}
+]
 
-def hello(request):
-    return HttpResponse("Hello")
+
+def available_labs(request):
+    context = {
+        'menu': menu,
+        'posts': Lab.objects.filter(is_published=True),
+        'title': 'All labs available'
+    }
+    return render(request, 'labs/index.html', context=context)
+
+def all_labs(request):
+    context = {
+        'menu': menu,
+        'posts': Lab.objects.all(),
+        'title': 'All labs'
+    }
+    return render(request, 'labs/index.html', context=context)
+
+
+def main(request):
+    posts = Lab.objects.all()
+    context = {
+        'menu': menu,
+        'posts': Lab.objects.all(),
+        'title': 'Main page'
+    }
+    return render(request, 'labs/index.html', context = context)
+
+
+def about(request):
+    context = {
+        'menu' : menu,
+        'title': 'О сайте'
+    }
+    return render(request, 'labs/about.html', context=context)
+
+
+def lab(request, lab_number):
+    context = {
+    'menu' : menu,
+    'curr_lab' : Lab.objects.get(pk=lab_number)
+    }
+    return render(request, 'labs/curr_lab.html', context=context)
 
 def redir(request):
     return redirect('home', permanent=True)
-
-def index(request):
-    posts = Lab.objects.all()
-    return render(request, 'labs/index.html', {'posts': posts, 'menu': menu, 'title': 'Главная страница'})
-
-def about(request):
-    return render(request, 'labs/about.html', {'menu': menu, 'title': 'О сайте'})
-
-def lab_num(request, lab_number):
-    return HttpResponse(f"<h1>Лаба</h1><p>{lab_number}</p>")
 
 def page_not_found(request, exception):
     return HttpResponseNotFound(f"<h1>Страница не найдена<h1>")
