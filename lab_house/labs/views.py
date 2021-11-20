@@ -3,23 +3,38 @@ from django.shortcuts import render, redirect
 
 from .models import *
 
-menu = ["About site", "Add comment", "Sign in"]
+menu = [
+	{'title': 'Main', 'url_name': 'home'},
+	{'title': 'All labs', 'url_name': 'all'},
+	{'title': 'Labs available', 'url_name': 'labs_av'},
+]
 
-def hello(request):
-    return HttpResponse("Hello")
+
+def la(request):
+	context = {
+		'menu': menu,
+		'posts': Lab.objects.all(),
+		'title': 'All labs available'
+	}
+	return render(request, 'labs/index.html', context = context)
+
 
 def redir(request):
-    return redirect('home', permanent=True)
+	return redirect('home', permanent = True)
 
-def index(request):
-    posts = Lab.objects.all()
-    return render(request, 'labs/index.html', {'posts': posts, 'menu': menu, 'title': 'Главная страница'})
+
+def main(request):
+	posts = Lab.objects.all()
+	return render(request, 'labs/index.html', {'posts': posts, 'menu': menu, 'title': 'Главная страница'})
+
 
 def about(request):
-    return render(request, 'labs/about.html', {'menu': menu, 'title': 'О сайте'})
+	return render(request, 'labs/about.html', {'menu': menu, 'title': 'О сайте'})
 
-def lab_num(request, lab_number):
-    return HttpResponse(f"<h1>Лаба</h1><p>{lab_number}</p>")
+
+def lab(request, lab_number):
+	return HttpResponse(f"<h1>Лаба</h1><p>{lab_number}</p>")
+
 
 def page_not_found(request, exception):
-    return HttpResponseNotFound(f"<h1>Страница не найдена<h1>")
+	return HttpResponseNotFound(f"<h1>Страница не найдена<h1>")
