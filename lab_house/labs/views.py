@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpResponseNotFound, Http404
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from .models import *
 
@@ -19,6 +19,7 @@ def available_labs(request):
     }
     return render(request, 'labs/index.html', context=context)
 
+
 def all_labs(request):
     context = {
         'menu': menu,
@@ -35,12 +36,12 @@ def main(request):
         'posts': Lab.objects.all(),
         'title': 'Main page'
     }
-    return render(request, 'labs/index.html', context = context)
+    return render(request, 'labs/index.html', context=context)
 
 
 def about(request):
     context = {
-        'menu' : menu,
+        'menu': menu,
         'title': 'О сайте'
     }
     return render(request, 'labs/about.html', context=context)
@@ -48,13 +49,15 @@ def about(request):
 
 def lab(request, lab_number):
     context = {
-    'menu' : menu,
-    'curr_lab' : Lab.objects.get(pk=lab_number)
+        'menu': menu,
+        'curr_lab': get_object_or_404(Lab, pk=lab_number)
     }
     return render(request, 'labs/curr_lab.html', context=context)
 
+
 def redir(request):
     return redirect('home', permanent=True)
+
 
 def page_not_found(request, exception):
     return HttpResponseNotFound(f"<h1>Страница не найдена<h1>")
