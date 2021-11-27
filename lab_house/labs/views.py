@@ -6,6 +6,7 @@ from django.contrib.auth.views import LoginView
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -17,7 +18,7 @@ from .utils import *
 # def available_labs(request):
 #     context = {
 #         'menu': menu,
-#         'posts': Lab.objects.filter(is_published=True),
+#         'posts': Lab.objects.filter(is_available=True),
 #         'title': 'All labs available'
 #     }
 #     return render(request, 'labs/index.html', context=context)
@@ -34,7 +35,7 @@ class AvailableLabs(DataMixin, ListView):
         return dict(list(context.items()) + list(c_def.items()))
 
     def get_queryset(self):
-        return Lab.objects.filter(is_published=True)
+        return Lab.objects.filter(is_available=True)
 
 
 class AllLabs(DataMixin, ListView):
@@ -59,29 +60,39 @@ class MainPage(DataMixin, ListView):
         return dict(list(context.items()) + list(c_def.items()))
 
 
-def about(request):
-    context = get_user_context(request, title="О сайте")
-    return render(request, 'labs/about.html', context=context)
+class PersonalCabinet(DataMixin, ListView):
+    model = UserLab
+    template_name = 'labs/pers_cab.html'
+    context_object_name = 'posts'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title="Личный кабинет")
+        return dict(list(context.items()) + list(c_def.items()))
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return UserLab.objects.filter(mentor=self.request.user)
+        return UserLab.objects.filter(user=self.request.user)
 
 
-# def lab(request, lab_number):
-#     context = {
-#         'menu': menu,
-#         'curr_lab': get_object_or_404(Lab, pk=lab_number)
-#     }
-#     return render(request, 'labs/curr_lab.html', context=context)
+class AboutSite(DataMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_user_context(title="О сайте")
+        return render(request, 'labs/about.html', context=context)
+
 
 class ShowLab(DataMixin, DetailView):
     model = Lab
     template_name = 'labs/curr_lab.html'
-    # pk_url_kwarg = lab_number  # почему-то не работает
+    pk_url_kwarg = 'lab_number'
     context_object_name = 'curr_lab'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title=context['curr_lab'])
         return dict(list(context.items()) + list(c_def.items()))
-
 
 
 class LoginUser(DataMixin, LoginView):
@@ -111,11 +122,6 @@ class RegisterUser(DataMixin, CreateView):
         user = form.save()
         login(self.request, user)
         return redirect('home')
-
-
-def personal_cabinet(request):
-    context = get_user_context(request, title="Личный кабинет")
-    return render(request, 'labs/pers_cab.html', context=context)
 
 
 def logout_user(request):
