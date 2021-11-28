@@ -2,26 +2,27 @@ from django.db.models import Count
 
 from .models import *
 
-menu = [
-    {'title': 'Main', 'url_name': 'home'},
+menu_staff = [
     {'title': 'All labs', 'url_name': 'all'},
     {'title': 'Labs available', 'url_name': 'labs_av'},
-    {'title': 'About', 'url_name': 'about'},
-    {'title': 'Login', 'url_name': 'login'},
-    {'title': 'Register', 'url_name': 'register'},
-    {'title': 'Personal Cabinet', 'url_name': 'lk'}
+    {'title': 'Stuff', 'url_name': 'stuff'},
+]
+
+menu_user = [
+    {'title': 'All labs', 'url_name': 'labs_av'},
+    {'title': 'My labs', 'url_name': 'my_labs'},
+    {'title': 'Stuff', 'url_name': 'stuff'},
 ]
 
 
 class DataMixin:
     def get_user_context(self, **kwargs):
         context = kwargs
-        user_menu = menu.copy()
-        if self.request.user.is_authenticated:
-            # Вроде костыльно а вроде и норм
-            user_menu.pop(4)
-            user_menu.pop(4)
+        if self.request.user.is_staff:
+            context['menu'] = menu_staff.copy()
         else:
-            user_menu.pop(6)
-        context['menu'] = user_menu
+            menu = menu_user.copy()
+            if not self.request.user.is_authenticated:
+                menu.pop(1)
+            context['menu'] = menu
         return context

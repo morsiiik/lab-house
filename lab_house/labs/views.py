@@ -26,7 +26,7 @@ from .utils import *
 
 class AvailableLabs(DataMixin, ListView):
     model = Lab
-    template_name = 'labs/index.html'
+    template_name = 'labs/labs_av.html'
     context_object_name = 'posts'
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -79,7 +79,7 @@ class PersonalCabinet(DataMixin, ListView):
 class AboutSite(DataMixin, View):
 
     def get(self, request, *args, **kwargs):
-        context = self.get_user_context(title="О сайте")
+        context = self.get_user_context(title="Полезные материалы")
         return render(request, 'labs/about.html', context=context)
 
 
@@ -93,6 +93,37 @@ class ShowLab(DataMixin, DetailView):
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title=context['curr_lab'])
         return dict(list(context.items()) + list(c_def.items()))
+
+
+class MyLabs(DataMixin, ListView):
+    model = UserLab
+    template_name = 'labs/my_labs.html'
+    context_object_name = 'posts'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title='MyLabs')
+        return dict(list(context.items()) + list(c_def.items()))
+
+    def get_queryset(self):
+        return UserLab.objects.filter(user=self.request.user)
+
+
+class ShowUserLab(DataMixin, DetailView):
+    model = UserLab
+    template_name = 'labs/user_lab.html'
+    context_object_name = 'lab'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title=context['lab'], user=User.objects.get(username=self.kwargs['username']))
+        return dict(list(context.items()) + list(c_def.items()))
+
+    def get_object(self, queryset=None, **kwargs):
+        # слишком длинно и сложно, мб можно упростить?
+        return UserLab.objects.get(lab=Lab.objects.get(pk=self.kwargs['lab_number']),
+                                   user=User.objects.get(username=self.kwargs['username']))
+        # return UserLab.objects.get(pk = self.kwargs['lab_number']+1)
 
 
 class LoginUser(DataMixin, LoginView):

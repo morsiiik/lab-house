@@ -1,0 +1,40 @@
+{% extends 'labs/base.html' %}
+
+{% block content %}
+
+<ul class="mylab">
+    {% for p in posts %}
+    {% if p.lab.is_available %}
+    {% if p.is_approved %}
+
+    <li class="approved">
+        <h2><a href=/{{ p.user.username }}/lab/{{ p.lab.id }}>{{ p.lab.title }}</a></h2>
+        <p>{{ p.lab.deadline }}</p>
+        <hr>
+    </li>
+
+    {% elif p.is_sent %}
+
+    <li class="not_approved">
+        <h2><a href=/{{ p.user.username }}/lab/{{ p.lab.id }}>{{ p.lab.title }}</a></h2>
+        <p>{{ p.lab.deadline }}</p>
+        <hr>
+    </li>
+
+    {% else %}
+
+    <li class="not_sent">
+        <h2><a href=/{{ p.user.username }}/lab/{{ p.lab.id }}>{{ p.lab.title }}</a></h2>
+        <p>{{ p.lab.deadline }}</p>
+        <hr>
+    </li>
+
+    {% endif %}
+    {% endif %}
+
+    {% endfor %}
+</ul>
+<br>
+
+{% endblock content %}
+

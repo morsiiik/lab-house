@@ -9,9 +9,11 @@ urlpatterns = [
     path('all/', AllLabs.as_view(), name='all'),
     path('labs-available/', AvailableLabs.as_view(), name='labs_av'),
     path('', MainPage.as_view(), name='home'),
-    path('about/', AboutSite.as_view(), name='about'),
+    path('about/', AboutSite.as_view(), name='stuff'),
     path('login/', LoginUser.as_view(), name='login'),
     path('lk/logout/', logout_user, name='logout'),
     path('register/', RegisterUser.as_view(), name='register'),
-    path('lk/', PersonalCabinet.as_view(), name='lk')
+    path('lk/', PersonalCabinet.as_view(), name='lk'),
+    path('my-labs/', MyLabs.as_view() , name='my_labs'),
+    path('<str:username>/lab/<int:lab_number>/', ShowUserLab.as_view(), name='user_lab')
 ]

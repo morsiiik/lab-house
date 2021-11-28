@@ -13,9 +13,9 @@ class LabAdmin(admin.ModelAdmin):
 class UserLabAdmin(admin.ModelAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'user':
-            return ModelChoiceField(User.objects.filter(is_superuser=False))
+            return ModelChoiceField(User.objects.filter(is_staff=False))
         if db_field.name == 'mentor':
-            return ModelChoiceField(User.objects.filter(is_superuser=True))
+            return ModelChoiceField(User.objects.filter(is_staff=True))
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 

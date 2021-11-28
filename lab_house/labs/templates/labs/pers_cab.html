@@ -42,7 +42,7 @@
         {% for p in posts %}
         {% if not p.is_approved and p.is_sent %}
         <li>
-            <h2><a href=/lab/{{ p.lab.id }}>{{ p.lab.title }}</a></h2>
+            <h2><a href=/{{p.user.username}}/lab/{{p.lab.id}}>{{p.lab.title}}</a></h2>
             <h3><a href={{ p.url }} target="_blank">Ссылка на гит</a></h3>
             <h3>{{ p.user.username }}</h3>
             <hr>

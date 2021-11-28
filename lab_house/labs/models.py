@@ -18,6 +18,16 @@ class Lab(models.Model):
     def get_absolute_url(self):
         return reverse('lab', kwargs={'lab_number': self.pk})
 
+    def save(self, *args, **kwargs):
+        if self.pk is None:
+            super().save(*args, **kwargs)
+            users = User.objects.all()
+            for u in users:
+                if not u.is_staff:
+                    UserLab.objects.create(lab=self, user=u)
+        else:
+            super().save(*args, **kwargs)
+
     class Meta:
         verbose_name = 'Лабораторная'
         verbose_name_plural = 'Лабораторные'
@@ -34,6 +44,10 @@ class UserLab(models.Model):
     is_approved = models.BooleanField(default=False, verbose_name='Зачтена')
     is_sent = models.BooleanField(default=False, verbose_name='Отправлена')
     mentor = models.ForeignKey(User, verbose_name='Ментор', blank=True, null=True, on_delete=models.SET_NULL)
+    commits = models.PositiveIntegerField(default=0)
+
+    def get_absolute_url(self):
+        return reverse('user_lab', kwargs={'username': self.user.username, 'lab_number': self.lab.pk})
 
     def __str__(self):
         return "Лабораторная: {}, Студента: {}".format(self.lab.title, self.user.username)

@@ -1,0 +1,18 @@
+{% extends 'labs/base.html' %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+<p>Содержимое страницы {{ title }}</p>
+
+<ul>
+    {% for p in posts %}
+    <li>
+        <h2><a href=/lab/{{ p.id }}>{{ p.title }}</a></h2>
+        <p>{{ p.deadline }}</p>
+        <hr>
+
+    </li>
+    {% endfor %}
+</ul>
+
+{% endblock content %}

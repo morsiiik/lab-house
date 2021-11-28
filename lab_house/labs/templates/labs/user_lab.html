@@ -1,0 +1,30 @@
+{% extends 'labs/base.html' %}
+
+{% block content %}
+<h1><a href=/lab/{{ lab.lab.id }}>Lab number: {{lab.lab.id}}</a></h1>
+
+<h2>Название: {{ lab.lab.title }}</h2>
+
+<h2>Студент: {{ lab.user.username }}</h2>
+
+
+{% if lab.url %}
+<h2>Ментор: {{ lab.mentor.username }}</h2>
+<h2><a href={{ lab.url }} target="_blank">Cсылка на гит</a></h2>
+
+{% else %}
+<a href="#">
+    <button class="btn">Сдать работу</button>
+</a>
+{% endif %}
+
+<!--    <h2>Описание:</h2>-->
+<!--    <p>{{ curr_lab.task }}</p>-->
+
+<!--    <h2>Deadline:</h2>-->
+<!--    <p>{{ curr_lab.deadline }}</p>-->
+
+<!--    &lt;!&ndash; как-то так нужно встраивать README.md каждой лабы, но надо разобраться  &ndash;&gt;-->
+<!--    <script src="https://gist.github.com/Jekins/2bf2d0638163f1294637.js"></script>-->
+
+{% endblock content %}
