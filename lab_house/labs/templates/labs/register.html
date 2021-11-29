@@ -1,18 +1,26 @@
 {% extends 'labs/base.html' %}
 
 {% block content %}
-<h1>{{title}}</h1>
+
+<main class="form-signin text-center">
+
+
 
 <form method="post">
     {% csrf_token %}
 
-{% for f in form %}
-<!--   TODO: why it is invalid id? -->
-<p><label class="form-label" for="{{ f.id_for_label }}">{{f.label}}: </label>{{ f }}</p>
-<div class="form-error">{{ f.errors }}</div>
-{% endfor %}
+    <h1 class="h3 mb-3 fw-normal">{{title}}</h1>
+    <div class="form-error">{{ form.non_field_errors }}</div>
 
-    <button type="submit">Регистрация</button>
+    {% for f in form %}
+        <div class="form-floating">
+        <p>{{ f }}</p><label for="{{ f.id_for_label }}"></label>
+        <div class="form-error">{{ f.errors }}</div>
+        </div>
+    {% endfor %}
+
+    <button class="w-40 btn btn-lg btn-primary" type="submit">Регистрация</button>
 </form>
+</main>
 
 {% endblock %}

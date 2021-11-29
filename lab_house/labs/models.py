@@ -1,8 +1,18 @@
+from allauth.account.signals import user_signed_up, user_logged_in
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.dispatch import receiver
 from django.urls import reverse
 
 User = get_user_model()
+
+
+@receiver(user_logged_in, dispatch_uid="some.unique.string.id.for.allauth.user_signed_up")
+def user_signed_up_(sender, **kwargs):
+    print("new reg")
+    # labs = Lab.objects.all()
+    # for l in labs:
+    #     UserLab.objects.create(lab=l, user=user)
 
 
 class Lab(models.Model):

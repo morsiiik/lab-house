@@ -162,3 +162,4 @@ def logout_user(request):
 
 def page_not_found(request, exception):
     return HttpResponseNotFound(f"<h1>Страница не найдена<h1>")
+
