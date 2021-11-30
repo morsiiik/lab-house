@@ -14,6 +14,8 @@ urlpatterns = [
     path('lk/logout/', logout_user, name='logout'),
     path('register/', RegisterUser.as_view(), name='register'),
     path('lk/', PersonalCabinet.as_view(), name='lk'),
-    path('my-labs/', MyLabs.as_view() , name='my_labs'),
-    path('<str:username>/lab/<int:lab_number>/', ShowUserLab.as_view(), name='user_lab')
+    path('<str:username>/labs/', MyLabs.as_view() , name='my_labs'),
+    path('<str:username>/lab/<int:lab_number>/', ShowUserLab.as_view(), name='user_lab'),
+    path('/send_lab/<str:username>/lab/<int:lab_number>/', SendUserLab.as_view(), name='send_lab'),
+    path('/approve_lab/<str:username>/lab/<int:lab_number>/', ApproveUserLab.as_view(), name='approve_lab')
 ]

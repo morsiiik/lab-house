@@ -24,5 +24,13 @@ class DataMixin:
             menu = menu_user.copy()
             if not self.request.user.is_authenticated:
                 menu.pop(1)
+            else:
+                menu[1]['username'] = self.request.user.username
             context['menu'] = menu
         return context
+
+
+def check_url(url):
+    url = str(url)
+    components = url.split('/')# ['https:', '', 'github.com', '....', '....', 'pull', '1']
+    return len(components)==7 and components[2] == 'github.com' and components[5] == 'pull' and components[6].isdigit()

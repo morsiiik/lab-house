@@ -20,7 +20,7 @@
 <!--        { block mainmenu %}-->
 <!--            <ul class="main_list">-->
 <!--                {% for m in menu %}-->
-<!--                    <li><a href="{% url m.url_name %}">{{ m.title }}</a></li>-->
+<!--                    <li><a href="{ url m.url_name %}">{{ m.title }}</a></li>-->
 <!--                {% endfor %}-->
 <!--            </ul>-->
 <!--        { endblock mainmenu %}-->
@@ -41,7 +41,11 @@
                 <div class="logo"></div>
             </a></li>
             {% for m in menu %}
-            <li><a href="{% url m.url_name %}">{{m.title}}</a></li>
+            {% if m.username %}
+            <li><a href="{% url m.url_name username=m.username %}">{{m.title}}</a></li>
+            {% else %}
+            <li><a href="{% url m.url_name%}">{{m.title}}</a></li>
+            {% endif %}
             {% endfor %}
             {% if request.user.is_authenticated %}
             <li class="last"><a href="{% url 'lk' %}">Личный кабинет</a></li>
@@ -54,6 +58,19 @@
     </div>
     {% endblock mainmenu %}
     <br>
+
+    {% if messages %}
+    {% for message in messages %}
+
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        <strong>{{ message }}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+
+    {% endfor %}
+    {% endif %}
+
     {% block content %}
     {% endblock %}
 

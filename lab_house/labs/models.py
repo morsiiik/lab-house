@@ -7,14 +7,6 @@ from django.urls import reverse
 User = get_user_model()
 
 
-@receiver(user_logged_in, dispatch_uid="some.unique.string.id.for.allauth.user_signed_up")
-def user_signed_up_(sender, **kwargs):
-    print("new reg")
-    # labs = Lab.objects.all()
-    # for l in labs:
-    #     UserLab.objects.create(lab=l, user=user)
-
-
 class Lab(models.Model):
     title = models.CharField(max_length=200, verbose_name='Заголовок')
     task = models.TextField(blank=True, verbose_name='Задание')
@@ -33,7 +25,7 @@ class Lab(models.Model):
             super().save(*args, **kwargs)
             users = User.objects.all()
             for u in users:
-                if not u.is_staff:
+                if u.is_active and not u.is_staff:
                     UserLab.objects.create(lab=self, user=u)
         else:
             super().save(*args, **kwargs)
@@ -61,3 +53,7 @@ class UserLab(models.Model):
 
     def __str__(self):
         return "Лабораторная: {}, Студента: {}".format(self.lab.title, self.user.username)
+
+
+class MentorCounter(models.Model):
+    counter = models.PositiveIntegerField(default=0)

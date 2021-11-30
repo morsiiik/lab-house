@@ -1,9 +1,11 @@
+from django.contrib import messages
 from django.contrib.auth import logout, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
-from django.http import HttpResponse, HttpResponseNotFound, Http404
+from django.core.exceptions import PermissionDenied
+from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
@@ -83,6 +85,49 @@ class AboutSite(DataMixin, View):
         return render(request, 'labs/about.html', context=context)
 
 
+class ApproveUserLab(DataMixin, View):
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            raise PermissionDenied()
+        if request.POST.get('check'):
+            lab = UserLab.objects.get(user=User.objects.get(username=kwargs.get('username')),
+                                      lab=Lab.objects.get(pk=kwargs.get('lab_number')))
+            lab.is_approved = True
+            lab.save()
+            messages.add_message(request, messages.SUCCESS, 'Лабораторная успешно принята')
+        return redirect('user_lab', username=kwargs.get('username'), lab_number=kwargs.get('lab_number'))
+
+
+class SendUserLab(DataMixin, View):
+    def post(self, request, *args, **kwargs):
+        if request.user.username != kwargs.get('username'):
+            raise PermissionDenied()
+        user = request.user
+        lab_number = kwargs.get('lab_number')
+        lab = UserLab.objects.get(user=user, lab=Lab.objects.get(pk=lab_number))
+        url = request.POST.get('url')
+        if not check_url(url):
+            messages.add_message(request, messages.WARNING,
+                                 'Отправляйте ссылку на pull request формата https://github.com/..../..../pull/1')
+            return redirect('user_lab', username=request.user, lab_number=lab_number)
+        lab.url = request.POST.get('url')
+        mentors = User.objects.filter(is_staff=True, is_active=True, is_superuser=False)
+        if mentors.exists():
+            counter = MentorCounter.objects.get(pk=0)
+            num = int(MentorCounter.objects.get(pk=0).counter)
+            lab.mentor = mentors[num]
+            num += 1
+            if num == mentors.count():
+                counter.counter = 0
+            counter.save()
+        else:
+            lab.mentor = User.objects.filter(is_superuser=True)[0]
+        lab.is_sent = True
+        lab.save()
+        messages.add_message(request, messages.SUCCESS, 'Лабораторная успешно отправлена')
+        return redirect('user_lab', username=request.user, lab_number=lab_number)
+
+
 class ShowLab(DataMixin, DetailView):
     model = Lab
     template_name = 'labs/curr_lab.html'
@@ -106,7 +151,7 @@ class MyLabs(DataMixin, ListView):
         return dict(list(context.items()) + list(c_def.items()))
 
     def get_queryset(self):
-        return UserLab.objects.filter(user=self.request.user)
+        return UserLab.objects.filter(user=User.objects.get(username=self.kwargs['username']))
 
 
 class ShowUserLab(DataMixin, DetailView):
@@ -162,4 +207,3 @@ def logout_user(request):
 
 def page_not_found(request, exception):
     return HttpResponseNotFound(f"<h1>Страница не найдена<h1>")
-
