@@ -4,23 +4,21 @@
 
 <main class="form-signin text-center">
 
+    <form method="post">
+        {% csrf_token %}
 
+        <h1 class="h3 mb-3 fw-normal">{{title}}</h1>
+        <div class="form-error">{{ form.non_field_errors }}</div>
 
-<form method="post">
-    {% csrf_token %}
-
-    <h1 class="h3 mb-3 fw-normal">{{title}}</h1>
-    <div class="form-error">{{ form.non_field_errors }}</div>
-
-    {% for f in form %}
+        {% for f in form %}
         <div class="form-floating">
-        <p>{{ f }}</p><label for="{{ f.id_for_label }}"></label>
-        <div class="form-error">{{ f.errors }}</div>
+            <p>{{ f }}</p><label for="{{ f.id_for_label }}"></label>
+            <div class="form-error">{{ f.errors }}</div>
         </div>
-    {% endfor %}
+        {% endfor %}
 
-    <button class="w-40 btn btn-lg btn-primary" type="submit">Регистрация</button>
-</form>
+        <button class="w-40 btn btn-lg btn-primary" type="submit">Регистрация</button>
+    </form>
 </main>
 
 {% endblock %}

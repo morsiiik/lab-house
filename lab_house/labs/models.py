@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.dispatch import receiver
 from django.urls import reverse
 
 User = get_user_model()
@@ -36,10 +35,8 @@ class Lab(models.Model):
 
 
 class UserLab(models.Model):
-    # Lab.UserLabs.all() выведет все лабораторные пользователей, которые ссылаются на объект Lab
     lab = models.ForeignKey(Lab, verbose_name='Лабораторная', on_delete=models.CASCADE,
                             related_name='UsersLabs')
-    # User.MyLabs.all() выведет все лабораторные текущего студента
     user = models.ForeignKey(User, verbose_name='Студент', on_delete=models.CASCADE, related_name='MyLabs')
     url = models.URLField(verbose_name='URL', blank=True)
     is_approved = models.BooleanField(default=False, verbose_name='Зачтена')

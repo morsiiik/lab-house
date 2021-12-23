@@ -1,18 +1,18 @@
 {% extends 'labs/base.html' %}
 
 {% block content %}
-    <h1>Lab number {{ curr_lab.id }}</h1>
+<h1>Lab number {{ curr_lab.id }}</h1>
 
-    <h2>Название: {{ curr_lab.title }}</h2>
-    <h2><a href={{ curr_lab.url }} target="_blank">Cсылка</a></h2>
+<h2>Название: {{ curr_lab.title }}</h2>
+<h2><a href={{ curr_lab.url }} target="_blank">Cсылка</a></h2>
 
-    <h2>Описание:</h2>
-    <h3>{{ curr_lab.task }}</h3>
+<h2>Описание:</h2>
+<h3>{{ curr_lab.task }}</h3>
 
-    <h2>Deadline:</h2>
-    <h3>{{ curr_lab.deadline }}</h3>
+<h2>Deadline:</h2>
+<h3>{{ curr_lab.deadline }}</h3>
 
-    <!-- как-то так нужно встраивать README.md каждой лабы, но надо разобраться  -->
-    <script src="https://gist.github.com/Jekins/2bf2d0638163f1294637.js"></script>
+<!-- как-то так нужно встраивать README.md каждой лабы, но надо разобраться  -->
+<script src="https://gist.github.com/Jekins/2bf2d0638163f1294637.js"></script>
 
 {% endblock content %}

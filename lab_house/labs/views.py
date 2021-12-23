@@ -1,16 +1,13 @@
 from django.contrib import messages
 from django.contrib.auth import logout, login
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpResponseRedirect
-from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponseNotFound
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import ListView, DetailView, CreateView, FormView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView, DetailView, CreateView
 from datetime import date
 
 from .forms import LoginUserForm, RegisterUserForm
@@ -18,19 +15,10 @@ from .models import *
 from .utils import *
 
 
-# def available_labs(request):
-#     context = {
-#         'menu': menu,
-#         'posts': Lab.objects.filter(is_available=True),
-#         'title': 'All labs available'
-#     }
-#     return render(request, 'labs/index.html', context=context)
-
-
 class AvailableLabs(DataMixin, ListView):
     model = Lab
     template_name = 'labs/labs_av.html'
-    context_object_name = 'posts'
+    context_object_name = 'labs'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -43,8 +31,8 @@ class AvailableLabs(DataMixin, ListView):
 
 class AllLabs(DataMixin, ListView):
     model = Lab
-    template_name = 'labs/index.html'
-    context_object_name = 'posts'
+    template_name = 'labs/labs_all.html'
+    context_object_name = 'labs'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -52,15 +40,11 @@ class AllLabs(DataMixin, ListView):
         return dict(list(context.items()) + list(c_def.items()))
 
 
-class MainPage(DataMixin, ListView):
-    model = Lab
-    template_name = 'labs/index.html'
-    context_object_name = 'posts'
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title="Главная страница")
-        return dict(list(context.items()) + list(c_def.items()))
+class MainPage(DataMixin, View):
+    def get(self, request):
+        if self.request.user.is_staff:
+            return redirect('all')
+        return redirect('labs_av')
 
 
 class PersonalCabinet(DataMixin, ListView):
@@ -80,7 +64,6 @@ class PersonalCabinet(DataMixin, ListView):
 
 
 class Materials(DataMixin, ListView):
-
     model = Material
     template_name = 'labs/materials.html'
     context_object_name = 'materials'
@@ -200,10 +183,8 @@ class ShowUserLab(DataMixin, DetailView):
         return dict(list(context.items()) + list(c_def.items()))
 
     def get_object(self, queryset=None, **kwargs):
-        # слишком длинно и сложно, мб можно упростить?
         return UserLab.objects.get(lab=Lab.objects.get(pk=self.kwargs['lab_number']),
                                    user=User.objects.get(username=self.kwargs['username']))
-        # return UserLab.objects.get(pk = self.kwargs['lab_number']+1)
 
 
 class LoginUser(DataMixin, LoginView):
