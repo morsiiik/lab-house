@@ -1,7 +1,7 @@
 from django.contrib.auth import user_logged_in
 from django.dispatch import receiver
 
-from labs.models import Lab, UserLab
+from .models import Lab, UserLab
 
 '''
 Я потратил часа 3, чтобы разобраться почему не работает user_sign_up, для него нужна какая-то отдельная библиотека не 

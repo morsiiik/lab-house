@@ -19,15 +19,12 @@
       method="POST">
     {% csrf_token %}
 
-
-
-
     <div class="custom-control custom-checkbox">
     <input type="checkbox" class="custom-control-input" name="check"
                value="{{ lab.is_approved }}"id="customCheck1" >
     <label class="custom-control-label" for="customCheck1">Approve lab</label>
     </div>
-
+<!--TODO: Добавить количество коммитов с дизайном-->
     <br>
 
     <input type="submit" class="w-40 btn btn-lg btn-primary" value="Принять работу">

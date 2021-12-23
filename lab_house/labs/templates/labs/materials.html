@@ -3,12 +3,12 @@
 {% block content %}
     <h1>{{ title }}</h1>
 <br>
-
+<br>
     <ul>
-        {% for p in posts %}
+        {% for m in materials %}
             <li>
-                <h2><a href=/lab/{{ p.id }}>{{ p.title }}</a></h2>
-                <p>{{ p.deadline }}</p>
+                <h2>{{ m.title }}</h2>
+                <h3><a href={{ m.url }} target="_blank">{{ m.url }}</a></h3>
                 <hr>
             </li>
         {% endfor %}

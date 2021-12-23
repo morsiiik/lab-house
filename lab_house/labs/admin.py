@@ -19,5 +19,11 @@ class UserLabAdmin(admin.ModelAdmin):
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
+class MaterialAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title', 'url', 'is_actual')
+    list_display_links = ('id', 'title')
+
+
 admin.site.register(Lab, LabAdmin)
 admin.site.register(UserLab, UserLabAdmin)
+admin.site.register(Material, MaterialAdmin)

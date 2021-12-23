@@ -5,39 +5,12 @@
 <div>
     {% if user.is_authenticated %}
     <h2>Hi {{ user.username }}!</h2>
-    <br>
     <a href="logout">logout</a>
     <br>
     <br>
-    {% if not user.is_staff %}
-    <h3>Принято</h3>
-    <ul>
-        {% for p in posts %}
-        {% if p.is_approved %}
-        <li>
-            <h2><a href=/lab/{{ p.lab.id }}>{{ p.lab.title }}</a></h2>
-            <p>{{ p.lab.deadline }}</p>
-            <hr>
-        </li>
-        {% endif %}
-
-        {% endfor %}
-    </ul>
     <br>
-    <h3>Не принято</h3>
-    <ul>
-        {% for p in posts %}
-        {% if not p.is_approved %}
-        <li>
-            <h2><a href=/lab/{{ p.lab.id }}>{{ p.lab.title }}</a></h2>
-            <p>{{ p.lab.deadline }}</p>
-            <hr>
-        </li>
-        {% endif %}
-        {% endfor %}
-    </ul>
-    {% else %}
-    <h3>Отправлены</h3>
+    {% if user.is_staff %}
+        <h3>Отправлены</h3>
     <ul>
         {% for p in posts %}
         {% if not p.is_approved and p.is_sent %}
@@ -53,7 +26,7 @@
     {% endif %}
     {% else %}
     <p>You are not logged in.</p>
-    <a href="{% url 'login' %}">Log In</a>
+    <a href="{% url 'login' %}">Sign In</a>
     {% endif %}
 </div>
 

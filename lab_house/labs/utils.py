@@ -6,6 +6,7 @@ menu_staff = [
     {'title': 'All labs', 'url_name': 'all'},
     {'title': 'Labs available', 'url_name': 'labs_av'},
     {'title': 'Stuff', 'url_name': 'stuff'},
+    {'title': 'Statistic', 'url_name': 'students_statistic'},
 ]
 
 menu_user = [
@@ -32,5 +33,14 @@ class DataMixin:
 
 def check_url(url):
     url = str(url)
-    components = url.split('/')# ['https:', '', 'github.com', '....', '....', 'pull', '1']
-    return len(components)==7 and components[2] == 'github.com' and components[5] == 'pull' and components[6].isdigit()
+    components = url.split('/')  # ['https:', '', 'github.com', '....', '....', 'pull', '1']
+    return len(components) == 7 and components[2] == 'github.com' and components[5] == 'pull' and components[
+        6].isdigit()
+
+
+def get_user_lose_deadline_count(student, labs):
+    count = 0
+    for lab in labs:
+        if UserLab.objects.filter(user=student, lab=lab, is_approved=False).exists():
+            count += 1
+    return count

@@ -11,6 +11,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from datetime import date
 
 from .forms import LoginUserForm, RegisterUserForm
 from .models import *
@@ -78,11 +79,19 @@ class PersonalCabinet(DataMixin, ListView):
         return UserLab.objects.filter(user=self.request.user)
 
 
-class AboutSite(DataMixin, View):
+class Materials(DataMixin, ListView):
 
-    def get(self, request, *args, **kwargs):
-        context = self.get_user_context(title="Полезные материалы")
-        return render(request, 'labs/about.html', context=context)
+    model = Material
+    template_name = 'labs/materials.html'
+    context_object_name = 'materials'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title="Полезные материалы")
+        return dict(list(context.items()) + list(c_def.items()))
+
+    def get_queryset(self):
+        return Material.objects.filter(is_actual=True)
 
 
 class ApproveUserLab(DataMixin, View):
@@ -151,7 +160,33 @@ class MyLabs(DataMixin, ListView):
         return dict(list(context.items()) + list(c_def.items()))
 
     def get_queryset(self):
-        return UserLab.objects.filter(user=User.objects.get(username=self.kwargs['username']))
+        labs = UserLab.objects.filter(user=User.objects.get(username=self.kwargs['username']))
+        for lab in labs:
+            if lab.lab.deadline < date.today():
+                lab.lose_deadline = True
+            else:
+                lab.lose_deadline = False
+        return labs
+
+
+class StudentStatistic(DataMixin, ListView):
+    template_name = 'labs/student_statistic.html'
+    context_object_name = 'students'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title='Students Statistic')
+        return dict(list(context.items()) + list(c_def.items()))
+
+    def get_queryset(self):
+        students = User.objects.filter(is_staff=False, is_active=True)
+        for student in students:
+            student.approved_count = UserLab.objects.filter(user=student, is_approved=True).count()
+            student.not_approved_count = UserLab.objects.all().count() - student.approved_count - Lab.objects.filter(
+                is_available=False).count()
+            student.lose_deadline_count = get_user_lose_deadline_count(student, Lab.objects.filter(
+                deadline__range=["2000-12-31", date.today()]))
+        return students
 
 
 class ShowUserLab(DataMixin, DetailView):

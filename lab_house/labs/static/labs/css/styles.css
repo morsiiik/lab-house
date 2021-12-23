@@ -124,6 +124,10 @@ li.not_approved {
     height: 100px;
 }
 
+p.lose_deadline {
+    color: red;
+}
+
 ul.mylab {
     list-style: none;
     padding-left: 10px;

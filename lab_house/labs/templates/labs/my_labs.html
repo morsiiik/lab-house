@@ -25,7 +25,12 @@
 
     <li class="not_sent">
         <h2><a href=/{{ p.user.username }}/lab/{{ p.lab.id }}>{{ p.lab.title }}</a></h2>
+
+        {% if p.lose_deadline %}
+        <p class="lose_deadline">{{ p.lab.deadline }}</p>
+        {% else %}
         <p>{{ p.lab.deadline }}</p>
+        {% endif %}
         <hr>
     </li>
 

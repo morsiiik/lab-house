@@ -1,0 +1,20 @@
+{% extends 'labs/base.html' %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+
+<ul>
+    {% for st in students %}
+    <li>
+
+        <h2><a href=/{{st.username}}/labs/>{{ st.username }}</a></h2>
+        <p>Зачтено: {{st.approved_count}}</p>
+        <p>Не зачтено: {{st.not_approved_count}}</p>
+        <p>Просрочен дедлайн: {{st.lose_deadline_count}}</p>
+        <hr>
+
+    </li>
+    {% endfor %}
+</ul>
+
+{% endblock content %}

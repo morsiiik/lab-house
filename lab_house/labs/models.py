@@ -1,4 +1,3 @@
-from allauth.account.signals import user_signed_up, user_logged_in
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.dispatch import receiver
@@ -53,6 +52,17 @@ class UserLab(models.Model):
 
     def __str__(self):
         return "Лабораторная: {}, Студента: {}".format(self.lab.title, self.user.username)
+
+
+class Material(models.Model):
+    title = models.CharField(max_length=200, verbose_name='Заголовок')
+    url = models.URLField(verbose_name='URL')
+    is_actual = models.BooleanField(default=True, verbose_name='Актуальна')
+
+    class Meta:
+        verbose_name = 'Материал'
+        verbose_name_plural = 'Материалы'
+        ordering = ['pk']
 
 
 class MentorCounter(models.Model):
