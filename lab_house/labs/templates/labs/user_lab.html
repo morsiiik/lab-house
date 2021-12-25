@@ -3,12 +3,13 @@
 {% block content %}
 <h1><a href=/lab/{{ lab.lab.id }}>Lab number: {{lab.lab.id}}</a></h1>
 
-<h2>Название: {{ lab.lab.title }}</h2>
+<h3>Название: {{ lab.lab.title }}</h3>
 
-<h2>Студент: {{ lab.user.username }}</h2>
+<h3>Студент: {{ lab.user.username }}</h3>
 
 {% if lab.url %}
-<h2>Ментор: {{ lab.mentor.username }}</h2>
+<h3>Ментор: {{ lab.mentor.username }}</h3>
+<h3>Число коммитов: {{ lab.commits }}</h3>
 <h2><a href={{ lab.url }} target="_blank">Cсылка на гит</a></h2>
 
 {% if request.user.is_staff and not lab.is_approved %}
@@ -16,13 +17,16 @@
 <form action="{% url 'approve_lab' username=lab.user.username lab_number=lab.lab.id %}"
       method="POST">
     {% csrf_token %}
-
+    <br>
     <div class="custom-control custom-checkbox">
         <input type="checkbox" class="custom-control-input" name="check"
                value="{{ lab.is_approved }}" id="customCheck1">
         <label class="custom-control-label" for="customCheck1">Approve lab</label>
     </div>
-    <!--TODO: Добавить количество коммитов с дизайном-->
+    <br>
+    <label>Количество коммитов</label>
+    <input type="number" class="form-control" name="commits" style="width: 70px;" min="1" value="{{ lab.commits }}">
+
     <br>
 
     <input type="submit" class="w-40 btn btn-lg btn-primary" value="Принять работу">

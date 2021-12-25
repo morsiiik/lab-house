@@ -124,6 +124,11 @@ li.not_approved {
     height: 100px;
 }
 
+li.important {
+    background-color: #ffadad;
+
+}
+
 p.lose_deadline {
     color: red;
 }

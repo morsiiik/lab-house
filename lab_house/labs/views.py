@@ -40,11 +40,18 @@ class AllLabs(DataMixin, ListView):
         return dict(list(context.items()) + list(c_def.items()))
 
 
-class MainPage(DataMixin, View):
-    def get(self, request):
-        if self.request.user.is_staff:
-            return redirect('all')
-        return redirect('labs_av')
+class MainPage(DataMixin, ListView):
+    model = Announcement
+    template_name = 'labs/main.html'
+    context_object_name = 'announcements'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title="Главная страница")
+        return dict(list(context.items()) + list(c_def.items()))
+
+    def get_queryset(self):
+        return Announcement.objects.filter(is_actual=True).order_by('-is_important', 'time_create')
 
 
 class PersonalCabinet(DataMixin, ListView):
@@ -85,6 +92,7 @@ class ApproveUserLab(DataMixin, View):
             lab = UserLab.objects.get(user=User.objects.get(username=kwargs.get('username')),
                                       lab=Lab.objects.get(pk=kwargs.get('lab_number')))
             lab.is_approved = True
+            lab.commits = request.POST.get('commits')
             lab.save()
             messages.add_message(request, messages.SUCCESS, 'Лабораторная успешно принята')
         return redirect('user_lab', username=kwargs.get('username'), lab_number=kwargs.get('lab_number'))
@@ -105,12 +113,15 @@ class SendUserLab(DataMixin, View):
         lab.url = request.POST.get('url')
         mentors = User.objects.filter(is_staff=True, is_active=True, is_superuser=False)
         if mentors.exists():
-            counter = MentorCounter.objects.get(pk=0)
-            num = int(MentorCounter.objects.get(pk=0).counter)
+            counter = MentorCounter.objects.get(pk=1)
+            num = int(MentorCounter.objects.get(pk=1).counter)
             lab.mentor = mentors[num]
             num += 1
+            print(mentors.count())
             if num == mentors.count():
                 counter.counter = 0
+            else:
+                counter.counter = num
             counter.save()
         else:
             lab.mentor = User.objects.filter(is_superuser=True)[0]

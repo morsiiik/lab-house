@@ -62,5 +62,18 @@ class Material(models.Model):
         ordering = ['pk']
 
 
+class Announcement(models.Model):
+    title = models.CharField(max_length=255, verbose_name='Заголовок')
+    content = models.TextField(blank=True, verbose_name='Содержимое')
+    time_create = models.DateTimeField(auto_now_add=True, verbose_name='Время создания')
+    is_important = models.BooleanField(default=True, verbose_name='Важное')
+    is_actual = models.BooleanField(default=True, verbose_name='Актуально')
+
+    class Meta:
+        verbose_name = 'Объявление'
+        verbose_name_plural = 'Объявления'
+        ordering = ['pk']
+
+
 class MentorCounter(models.Model):
     counter = models.PositiveIntegerField(default=0)

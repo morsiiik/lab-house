@@ -6,10 +6,11 @@
     {% if user.is_authenticated %}
     <h2>Hi {{ user.username }}!</h2>
     <a href="logout">logout</a>
-    <br>
-    <br>
-    <br>
     {% if user.is_staff %}
+    <br>
+    <a href="/admin">go to admin panel</a>
+    <br>
+    <br>
     <h3>Отправлены</h3>
     <ul>
         {% for p in posts %}

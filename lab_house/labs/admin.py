@@ -23,6 +23,12 @@ class MaterialAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'title')
 
 
+class AnnouncementAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title', 'is_important', 'is_actual')
+    list_display_links = ('id', 'title')
+
+
 admin.site.register(Lab, LabAdmin)
 admin.site.register(UserLab, UserLabAdmin)
 admin.site.register(Material, MaterialAdmin)
+admin.site.register(Announcement, AnnouncementAdmin)
