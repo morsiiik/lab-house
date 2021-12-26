@@ -33,6 +33,11 @@ a:visited {
     /*color: black;*/
 }
 
+a.for_btn {
+    color: white;
+    text-decoration: none;
+}
+
 .main {
     background: #4ac1f7;
     color: #ff0000;
@@ -132,6 +137,7 @@ li.important {
 p.lose_deadline {
     color: red;
 }
+
 
 ul.mylab {
     list-style: none;

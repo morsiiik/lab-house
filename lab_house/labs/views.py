@@ -65,9 +65,8 @@ class PersonalCabinet(DataMixin, ListView):
         return dict(list(context.items()) + list(c_def.items()))
 
     def get_queryset(self):
-        if self.request.user.is_staff:
+        if self.request.user.is_authenticated and self.request.user.is_staff:
             return UserLab.objects.filter(mentor=self.request.user)
-        return UserLab.objects.filter(user=self.request.user)
 
 
 class Materials(DataMixin, ListView):
@@ -176,7 +175,7 @@ class StudentStatistic(DataMixin, ListView):
         students = User.objects.filter(is_staff=False, is_active=True)
         for student in students:
             student.approved_count = UserLab.objects.filter(user=student, is_approved=True).count()
-            student.not_approved_count = UserLab.objects.all().count() - student.approved_count - Lab.objects.filter(
+            student.not_approved_count = UserLab.objects.filter(user=student).count() - student.approved_count - Lab.objects.filter(
                 is_available=False).count()
             student.lose_deadline_count = get_user_lose_deadline_count(student, Lab.objects.filter(
                 deadline__range=["2000-12-31", date.today()]))

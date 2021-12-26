@@ -28,7 +28,10 @@
     <input type="number" class="form-control" name="commits" style="width: 70px;" min="1" value="{{ lab.commits }}">
 
     <br>
-
+    {% if request.user != lab.mentor %}
+    <label style="color: red">Будьте осторожны: вы не являетесь ментором для этой лабораторной</label>
+    <br>
+    {% endif %}
     <input type="submit" class="w-40 btn btn-lg btn-primary" value="Принять работу">
 </form>
 
