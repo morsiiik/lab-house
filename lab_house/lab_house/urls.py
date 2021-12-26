@@ -21,9 +21,8 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('labs/', index), # http://127.0.0.1:8000/labs
-    # path('cats/', categories)
     path('', include('labs.urls')),
+    path('chat/', include('chat.urls'))
 ]
 
 handler404 = page_not_found

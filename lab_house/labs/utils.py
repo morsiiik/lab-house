@@ -5,6 +5,7 @@ menu_staff = [
     {'title': 'Labs available', 'url_name': 'labs_av'},
     {'title': 'Stuff', 'url_name': 'stuff'},
     {'title': 'Statistic', 'url_name': 'students_statistic'},
+    {'title': 'Chats', 'url_name': 'chats'}
 ]
 
 menu_user = [

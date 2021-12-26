@@ -13,6 +13,7 @@ from datetime import date
 from .forms import LoginUserForm, RegisterUserForm
 from .models import *
 from .utils import *
+from chat.models import *
 
 
 class AvailableLabs(DataMixin, ListView):
@@ -115,8 +116,7 @@ class SendUserLab(DataMixin, View):
             counter = MentorCounter.objects.get(pk=1)
             num = int(MentorCounter.objects.get(pk=1).counter)
             lab.mentor = mentors[num]
-            num += 1
-            print(mentors.count())
+            num += 1cd
             if num == mentors.count():
                 counter.counter = 0
             else:
@@ -160,6 +160,21 @@ class MyLabs(DataMixin, ListView):
             else:
                 lab.lose_deadline = False
         return labs
+
+
+class Chats(DataMixin, ListView):
+    model = Room
+    template_name = 'labs/chats.html'
+    context_object_name = 'rooms'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title='Chats')
+        return dict(list(context.items()) + list(c_def.items()))
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return Room.objects.all()
 
 
 class StudentStatistic(DataMixin, ListView):
