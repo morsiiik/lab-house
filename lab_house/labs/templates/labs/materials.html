@@ -1,0 +1,17 @@
+{% extends 'labs/base.html' %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+<br>
+<br>
+<ul>
+    {% for m in materials %}
+    <li>
+        <h2>{{ m.title }}</h2>
+        <h3><a href={{ m.url }} target="_blank">{{ m.url }}</a></h3>
+        <hr>
+    </li>
+    {% endfor %}
+</ul>
+
+{% endblock content %}

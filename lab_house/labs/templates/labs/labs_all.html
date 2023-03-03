@@ -1,0 +1,16 @@
+{% extends 'labs/base.html' %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+<br>
+<ul>
+    {% for lab in labs %}
+    <li>
+        <h2><a href=/lab/{{ lab.id }}>{{ lab.title }}</a></h2>
+        <p>{{ lab.deadline }}</p>
+        <hr>
+    </li>
+    {% endfor %}
+</ul>
+
+{% endblock content %}

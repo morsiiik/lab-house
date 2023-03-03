@@ -1,0 +1,22 @@
+{% extends 'labs/base.html' %}
+
+{% block content %}
+<h1>Объявления</h1>
+<br>
+<ul>
+    {% for ann in announcements %}
+    {% if ann.is_important %}
+    <li class="important">
+    {% else %}
+    <li>
+    {% endif %}
+        <h3>{{ ann.title }}</h3>
+        <p>Дата: {{ann.time_create|date:"d-m-Y"}}</p>
+        {% autoescape on %}
+        {{ann.content|linebreaks|truncatewords:50}}
+        {% endautoescape %}
+        <hr>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock content %}

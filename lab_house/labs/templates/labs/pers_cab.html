@@ -1,0 +1,45 @@
+{% extends 'labs/base.html' %}
+
+{% block content %}
+
+<div>
+    {% if user.is_authenticated %}
+    <h2>Hi {{ user.username }}!</h2>
+    <br>
+    <form action="logout">
+        <button class="w-40 btn btn-lg btn-danger" aria-pressed="true">logout</button>
+    </form>
+    {% if user.is_staff %}
+    <br>
+    <form action="/admin">
+        <button class="w-40 btn btn-lg btn-primary">go to admin panel</button>
+    </form>
+
+
+    <br>
+    <br>
+
+    <h3>Отправлены</h3>
+    <ul>
+        {% for p in posts %}
+        {% if not p.is_approved and p.is_sent %}
+        <li>
+            <h2><a href=/{{p.user.username}}/lab/{{p.lab.id}}>{{p.lab.title}}</a></h2>
+            <h3><a href={{ p.url }} target="_blank">Ссылка на гит</a></h3>
+            <h3>{{ p.user.username }}</h3>
+            <hr>
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+
+    {% endif %}
+    {% else %}
+    <h2>You are not logged in.</h2>
+    <form action="{% url 'login' %}">
+        <button class="w-40 btn btn-lg btn-primary" aria-pressed="true">Sign In</button>
+    </form>
+    {% endif %}
+</div>
+
+{% endblock %}
